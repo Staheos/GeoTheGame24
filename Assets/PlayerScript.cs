@@ -42,9 +42,24 @@ public class PlayerScript : MonoBehaviour
 			this.shape = new Circle();
 			this.shape.OnChange(this.spriteRendererRef);
 		}
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            this.shape = new Square();
+            this.shape.OnChange(this.spriteRendererRef);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            this.shape = new Pentagon();
+            this.shape.OnChange(this.spriteRendererRef);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            this.shape = new Deltoid();
+            this.shape.OnChange(this.spriteRendererRef);
+        }
 
-		// obrót w stronę kursora
-		Vector3 mouse = Input.mousePosition;
+        // obrót w stronę kursora
+        Vector3 mouse = Input.mousePosition;
 		mouse -= new Vector3(Screen.width / 2, Screen.height / 2, 0);
 		mouse.Normalize();
 		double angle = Math.Atan(mouse.y / mouse.x) * 180 / Math.PI;

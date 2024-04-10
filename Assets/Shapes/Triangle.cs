@@ -6,14 +6,14 @@ public class Triangle : Shape
 {
     public override void OnChange(SpriteRenderer spriteRenderer)
     {
-        Debug.Log(Resources.Load<Sprite>("TrangleShapeSprite"));
+        Debug.Log(Resources.Load<Sprite>("TriangleSceneSprite"));
 
         //Texture2D tex = Resources.Load<Texture2D>("TrangleShapeSprite");
         //spriteRenderer.sprite = Sprite.Create(tex, new Rect(0, 0, 128, 128), spriteRenderer.sprite.pivot);
 
-        spriteRenderer.sprite = Resources.Load<Sprite>("TrangleShapeSprite");
+        spriteRenderer.sprite = Resources.Load<Sprite>("TriangleSceneSprite");
         //spriteRenderer.sprite = Sprite.Create()
-        // dodaæ tekstury odpowiednich kszta³tów
+        // dodaï¿½ tekstury odpowiednich ksztaï¿½tï¿½w
         //spriteRenderer.sprite = Sprite.Create()
     }
 }
