@@ -10,9 +10,11 @@ public class PlayerScript : MonoBehaviour
 	public float speed = 11;
 
 	public Rigidbody2D rigidBodyRef;
-    public SpriteRenderer spriteRendererRef;
+	public SpriteRenderer spriteRendererRef;
 
-    private bool pressedW;
+
+
+	private bool pressedW;
 	private bool pressedS;
 	private bool pressedA;
 	private bool pressedD;
@@ -24,26 +26,55 @@ public class PlayerScript : MonoBehaviour
 		this.pressedS = false;
 		this.pressedA = false;
 		this.pressedD = false;
-
-		this.shape = new Shape();
-		this.shape.OnChange(spriteRendererRef);
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
+		// zmiana kształtu
+		if (Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			this.shape = new Triangle();
+			this.shape.OnChange(this.spriteRendererRef);
+		}
+		if (Input.GetKeyDown(KeyCode.Alpha2))
+		{
+			this.shape = new Circle();
+			this.shape.OnChange(this.spriteRendererRef);
+		}
+
 		// obrót w stronę kursora
 		Vector3 mouse = Input.mousePosition;
 		mouse -= new Vector3(Screen.width / 2, Screen.height / 2, 0);
 		mouse.Normalize();
-		Debug.Log(mouse.ToString());
-		this.rigidBodyRef.rotation = (float)(Math.Atan(mouse.y / mouse.x) * 180 / Math.PI);
+		double angle = Math.Atan(mouse.y / mouse.x) * 180 / Math.PI;
+        if (mouse.x < 0 && mouse.y < 0)
+		{
+			angle = 90 + 90 + angle;
+		}
+		else if (mouse.x < 0)
+		{
+			// na dodatni
+			angle = -angle;
+			// dopełnienie od 0
+			angle = 90 + 90 - angle;
+		}
+		else if (mouse.y < 0)
+		{
+			angle = -angle;
+			angle = 90 + 90 + 90 + 90 - angle;
+		}
+		else
+		{
+			
+		}
+		this.rigidBodyRef.rotation = (float)angle;
 
 		// śledzenie kamery
 		Camera.main.transform.SetPositionAndRotation(new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, Camera.main.transform.position.z), Camera.main.transform.rotation);
 
-        // Ruch
-        if (Input.GetKeyDown(KeyCode.W))
+		// Ruch
+		if (Input.GetKeyDown(KeyCode.W))
 		{
 			this.pressedW = true;
 		}
@@ -97,5 +128,6 @@ public class PlayerScript : MonoBehaviour
 		vector2 = vector2 * this.speed;
 		this.rigidBodyRef.velocity = vector2;
 		// Ruch koniec
+
 	}
 }
