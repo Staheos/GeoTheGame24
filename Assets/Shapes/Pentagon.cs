@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Pentagon : Shape
 {
+    public Pentagon() : base()
+    {
+
+    }
     public override void OnChange(SpriteRenderer spriteRenderer)
     {
         Debug.Log(Resources.Load<Sprite>("PentagonShapeSprite"));

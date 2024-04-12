@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Square : Shape
 {
+    public Square() : base()
+    {
+
+    }
     public override void OnChange(SpriteRenderer spriteRenderer)
     {
         Debug.Log(Resources.Load<Sprite>("SquareShapeSprite"));
