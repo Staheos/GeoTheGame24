@@ -11,6 +11,7 @@ public class PlayerScript : MonoBehaviour
 
 	public Rigidbody2D rigidBodyRef;
 	public SpriteRenderer spriteRendererRef;
+	public Rigidbody Bullet;
 
 	private bool pressedW;
 	private bool pressedS;
@@ -31,11 +32,22 @@ public class PlayerScript : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		// obrót w stronę kursora
+		Vector3 mouse = Input.mousePosition;
+		mouse -= new Vector3(Screen.width / 2, Screen.height / 2, 0);
+		mouse.Normalize();
+		double angle = Math.Atan(mouse.y / mouse.x) * 180 / Math.PI;
+
 		this.shape.OnTick(Time.deltaTime, this.rigidBodyRef);
 
 		if (Input.GetKeyDown(KeyCode.Mouse0))
 		{
 			this.shape.OnLeftMouseButton(Time.deltaTime, this.rigidBodyRef);
+			if (true)
+            {
+				var bullet = Instantiate(Bullet, transform.position, transform.rotation);
+				bullet.velocity = new Vector2((float)Math.Cos(angle), (float)Math.Cos(angle));
+			}
 		}
 		if (Input.GetKeyDown(KeyCode.Mouse1)) 
 		{
@@ -73,11 +85,6 @@ public class PlayerScript : MonoBehaviour
 			this.shape.OnChange(this.spriteRendererRef);
 		}
 
-		// obrót w stronę kursora
-		Vector3 mouse = Input.mousePosition;
-		mouse -= new Vector3(Screen.width / 2, Screen.height / 2, 0);
-		mouse.Normalize();
-		double angle = Math.Atan(mouse.y / mouse.x) * 180 / Math.PI;
 		if (mouse.x < 0 && mouse.y < 0)
 		{
 			angle = 90 + 90 + angle;
