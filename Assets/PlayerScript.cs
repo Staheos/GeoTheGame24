@@ -12,8 +12,6 @@ public class PlayerScript : MonoBehaviour
 	public Rigidbody2D rigidBodyRef;
 	public SpriteRenderer spriteRendererRef;
 
-
-
 	private bool pressedW;
 	private bool pressedS;
 	private bool pressedA;
@@ -26,11 +24,28 @@ public class PlayerScript : MonoBehaviour
 		this.pressedS = false;
 		this.pressedA = false;
 		this.pressedD = false;
+
+		this.shape = new Shape();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
+		this.shape.OnTick(Time.deltaTime, this.rigidBodyRef);
+
+		if (Input.GetKeyDown(KeyCode.Mouse0))
+		{
+			this.shape.OnLeftMouseButton(Time.deltaTime, this.rigidBodyRef);
+		}
+		if (Input.GetKeyDown(KeyCode.Mouse1)) 
+		{
+			this.shape.OnRightMouseButton(Time.deltaTime);
+		}
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+			this.shape.OnRButton(Time.deltaTime);
+		}
+
 		// zmiana kształtu
 		if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
@@ -42,28 +57,28 @@ public class PlayerScript : MonoBehaviour
 			this.shape = new Circle();
 			this.shape.OnChange(this.spriteRendererRef);
 		}
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            this.shape = new Square();
-            this.shape.OnChange(this.spriteRendererRef);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            this.shape = new Pentagon();
-            this.shape.OnChange(this.spriteRendererRef);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            this.shape = new Deltoid();
-            this.shape.OnChange(this.spriteRendererRef);
-        }
+		if (Input.GetKeyDown(KeyCode.Alpha3))
+		{
+			this.shape = new Square();
+			this.shape.OnChange(this.spriteRendererRef);
+		}
+		if (Input.GetKeyDown(KeyCode.Alpha4))
+		{
+			this.shape = new Pentagon();
+			this.shape.OnChange(this.spriteRendererRef);
+		}
+		if (Input.GetKeyDown(KeyCode.Alpha5))
+		{
+			this.shape = new Deltoid();
+			this.shape.OnChange(this.spriteRendererRef);
+		}
 
-        // obrót w stronę kursora
-        Vector3 mouse = Input.mousePosition;
+		// obrót w stronę kursora
+		Vector3 mouse = Input.mousePosition;
 		mouse -= new Vector3(Screen.width / 2, Screen.height / 2, 0);
 		mouse.Normalize();
 		double angle = Math.Atan(mouse.y / mouse.x) * 180 / Math.PI;
-        if (mouse.x < 0 && mouse.y < 0)
+		if (mouse.x < 0 && mouse.y < 0)
 		{
 			angle = 90 + 90 + angle;
 		}

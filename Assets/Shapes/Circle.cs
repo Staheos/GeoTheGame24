@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Circle : Shape
 {
+    public Circle() : base()
+    {
+
+    }
     public override void OnChange(SpriteRenderer spriteRenderer)
     {
         Debug.Log(Resources.Load<Sprite>("CircleShapeSprite"));

@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Deltoid : Shape
 {
+    public Deltoid() : base()
+    {
+
+    }
     public override void OnChange(SpriteRenderer spriteRenderer)
     {
         Debug.Log(Resources.Load<Sprite>("DeltoidShapeSprite"));
