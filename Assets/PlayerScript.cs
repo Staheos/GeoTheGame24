@@ -11,7 +11,7 @@ public class PlayerScript : MonoBehaviour
 
 	public Rigidbody2D rigidBodyRef;
 	public SpriteRenderer spriteRendererRef;
-	public Rigidbody Bullet;
+	public Rigidbody2D Bullet;
 
 	private bool pressedW;
 	private bool pressedS;
@@ -45,9 +45,19 @@ public class PlayerScript : MonoBehaviour
 			this.shape.OnLeftMouseButton(Time.deltaTime, this.rigidBodyRef);
 			if (true)
             {
-				var bullet = Instantiate(Bullet, transform.position, transform.rotation);
-				bullet.velocity = new Vector2((float)Math.Cos(angle), (float)Math.Cos(angle));
-			}
+				//var bullet = Instantiate(Bullet, transform.position, transform.rotation);
+				var bullet = Instantiate<Rigidbody2D>(Bullet, transform.position, transform.rotation);
+				//bullet.velocity = new Vector2((float)Math.Cos(angle), (float)Math.Cos(angle));
+				float rot = bullet.rotation;
+				if (rot < 0)
+				{
+					rot += 360;
+				}
+				float vel = 2.5f;
+				rot = (float)(rot * Math.PI / 180f);
+                Debug.Log(rot);
+				bullet.velocity = new Vector2((float)Math.Cos(rot), (float)Math.Sin(rot)) * vel;
+            }
 		}
 		if (Input.GetKeyDown(KeyCode.Mouse1)) 
 		{
