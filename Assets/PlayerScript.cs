@@ -12,6 +12,7 @@ public class PlayerScript : MonoBehaviour
 	public Rigidbody2D rigidBodyRef;
 	public SpriteRenderer spriteRendererRef;
 	public Rigidbody2D Bullet;
+	public Rigidbody2D ememyTrianglePatternRef;
 
 	private bool pressedW;
 	private bool pressedS;
@@ -32,6 +33,12 @@ public class PlayerScript : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.F)) 
+		{
+            var newEnemy = UnityEngine.Object.Instantiate<Rigidbody2D>(this.ememyTrianglePatternRef, this.transform.position, this.transform.rotation);
+            newEnemy.GetComponent<TriangleEnemyScript>().Activate();
+        }
+
 		// obrót w stronę kursora
 		Vector3 mouse = Input.mousePosition;
 		mouse -= new Vector3(Screen.width / 2, Screen.height / 2, 0);
@@ -42,22 +49,7 @@ public class PlayerScript : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Mouse0))
 		{
-			this.shape.OnLeftMouseButton(Time.deltaTime, this.rigidBodyRef);
-			if (true)
-            {
-				//var bullet = Instantiate(Bullet, transform.position, transform.rotation);
-				var bullet = Instantiate<Rigidbody2D>(Bullet, transform.position, transform.rotation);
-				//bullet.velocity = new Vector2((float)Math.Cos(angle), (float)Math.Cos(angle));
-				float rot = bullet.rotation;
-				if (rot < 0)
-				{
-					rot += 360;
-				}
-				float vel = 2.5f;
-				rot = (float)(rot * Math.PI / 180f);
-                Debug.Log(rot);
-				bullet.velocity = new Vector2((float)Math.Cos(rot), (float)Math.Sin(rot)) * vel;
-            }
+			this.shape.OnLeftMouseButton(Time.deltaTime, this.rigidBodyRef, this.Bullet);
 		}
 		if (Input.GetKeyDown(KeyCode.Mouse1)) 
 		{

@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Shape
 {
@@ -19,6 +21,8 @@ public class Shape
 
 	public float animationTimeLMB;
 
+	public float projectileVelocity;
+
 	public Shape()
 	{
 		this.playingAnimationLMB = false;
@@ -30,6 +34,8 @@ public class Shape
 		this.cooldownR = 0;
 
 		this.animationTimeLMB = 1;
+
+		this.projectileVelocity = 16f;
 	}
 
 	public virtual void OnChange(SpriteRenderer spriteRenderer)
@@ -43,6 +49,10 @@ public class Shape
 		//spriteRenderer.sprite = Sprite.Create()
 		// dodać tekstury odpowiednich kształtów
 		//spriteRenderer.sprite = Sprite.Create()
+	}
+	public virtual void OnEnd(Rigidbody2D player)
+	{
+		player.transform.localScale = this.startScale;
 	}
 	public virtual void OnTick(float dt, Rigidbody2D rigitBody2D)
 	{ 
@@ -76,12 +86,12 @@ public class Shape
 			this.AnimationR(dt);
 		}
 	}
-	public virtual void OnLeftMouseButton(float dt, Rigidbody2D rigidbody2D)
+	public virtual void OnLeftMouseButton(float dt, Rigidbody2D rigidbody2D, Rigidbody2D bulletPattern)
 	{
 		if (this.cooldownLMB <= 0)
 		{
-			this.ActionLeftMouseButton();
-			this.cooldownLMB = 1;
+			this.ActionLeftMouseButton(rigidbody2D, bulletPattern);
+			this.cooldownLMB = 0.3f;
 			this.playingAnimationLMB = true;
 			this.animationTimeLMB = 0;
 			this.startScale = rigidbody2D.transform.localScale;
@@ -105,10 +115,20 @@ public class Shape
 			this.playingAnimationR = true;
 		}
 	}
-	public virtual void ActionLeftMouseButton()
+	public virtual void ActionLeftMouseButton(Rigidbody2D player, Rigidbody2D bulletPattern)
 	{
-
-	}
+        //var bullet = Instantiate(Bullet, transform.position, transform.rotation);
+        var bullet = UnityEngine.Object.Instantiate<Rigidbody2D>(bulletPattern, player.transform.position, player.transform.rotation);
+        //bullet.velocity = new Vector2((float)Math.Cos(angle), (float)Math.Cos(angle));
+        float rot = bullet.rotation;
+        if (rot < 0)
+        {
+            rot += 360;
+        }
+        rot = (float)(rot * Math.PI / 180f);
+        bullet.velocity = new Vector2((float)Math.Cos(rot), (float)Math.Sin(rot)) * this.projectileVelocity;
+		bullet.GetComponent<BulletScript>().DestroyAfter(5f);
+    }
 	public virtual void ActionRightMouseButton()
 	{
 
@@ -124,7 +144,6 @@ public class Shape
 		if (this.animationTimeLMB >= 1)
 		{
 			this.animationTimeLMB = 1;
-			Debug.Log(dt);
 			this.playingAnimationLMB = false;
 		}
 	}
