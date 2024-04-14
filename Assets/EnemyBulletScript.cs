@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyBulletScript : MonoBehaviour
 {
+    public float distance;
+    public float damage;
     private bool activated = false;
     // Start is called before the first frame update
     void Start()
@@ -17,6 +19,12 @@ public class EnemyBulletScript : MonoBehaviour
         if (!this.activated)
         {
             return;
+        }
+        var player = FindObjectOfType<PlayerScript>();
+        if ((player.gameObject.transform.position - this.transform.position).magnitude <= this.distance)
+        {
+            player.TakeDamage(this.damage);
+            Destroy(this.gameObject);
         }
     }
     public void DestroyAfter(float time)

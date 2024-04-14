@@ -14,10 +14,16 @@ public class PlayerScript : MonoBehaviour
 	public Rigidbody2D Bullet;
 	public Rigidbody2D ememyTrianglePatternRef;
 
+	public float MAX_HP;
+	private float hp;
+
 	private bool pressedW;
 	private bool pressedS;
 	private bool pressedA;
 	private bool pressedD;
+	private bool pressedLMB;
+
+	private float trg_cd = 0;
 
 	// Start is called before the first frame update
 	void Start()
@@ -26,18 +32,27 @@ public class PlayerScript : MonoBehaviour
 		this.pressedS = false;
 		this.pressedA = false;
 		this.pressedD = false;
+		this.pressedLMB = false;
 
-		this.shape = new Shape();
+        this.hp = MAX_HP;
+
+        this.shape = new Shape();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.F)) 
+		if (Input.GetKey(KeyCode.F) && this.trg_cd <= 0) 
 		{
+			this.trg_cd = 0.1f;
             var newEnemy = UnityEngine.Object.Instantiate<Rigidbody2D>(this.ememyTrianglePatternRef, this.transform.position, this.transform.rotation);
             newEnemy.GetComponent<TriangleEnemyScript>().Activate();
         }
+		this.trg_cd -= Time.deltaTime;
+		if (this.trg_cd <= 0)
+		{
+			this.trg_cd = 0;
+		}
 
 		// obrót w stronę kursora
 		Vector3 mouse = Input.mousePosition;
@@ -47,7 +62,11 @@ public class PlayerScript : MonoBehaviour
 
 		this.shape.OnTick(Time.deltaTime, this.rigidBodyRef);
 
-		if (Input.GetKeyDown(KeyCode.Mouse0))
+		//if (Input.GetKeyDown(KeyCode.Mouse0))
+		//{
+		//	this.shape.OnLeftMouseButton(Time.deltaTime, this.rigidBodyRef, this.Bullet);
+		//}
+		if (Input.GetKey(KeyCode.Mouse0)) 
 		{
 			this.shape.OnLeftMouseButton(Time.deltaTime, this.rigidBodyRef, this.Bullet);
 		}
@@ -61,27 +80,27 @@ public class PlayerScript : MonoBehaviour
 		}
 
 		// zmiana kształtu
-		if (Input.GetKeyDown(KeyCode.Alpha1))
+		if (Input.GetKeyDown(KeyCode.Alpha1) && !this.shape.IsPlayingAnimations())
 		{
 			this.shape = new Triangle();
 			this.shape.OnChange(this.spriteRendererRef);
 		}
-		if (Input.GetKeyDown(KeyCode.Alpha2))
+		if (Input.GetKeyDown(KeyCode.Alpha2) && !this.shape.IsPlayingAnimations())
 		{
 			this.shape = new Circle();
 			this.shape.OnChange(this.spriteRendererRef);
 		}
-		if (Input.GetKeyDown(KeyCode.Alpha3))
+		if (Input.GetKeyDown(KeyCode.Alpha3) && !this.shape.IsPlayingAnimations())
 		{
 			this.shape = new Square();
 			this.shape.OnChange(this.spriteRendererRef);
 		}
-		if (Input.GetKeyDown(KeyCode.Alpha4))
+		if (Input.GetKeyDown(KeyCode.Alpha4) && !this.shape.IsPlayingAnimations())
 		{
 			this.shape = new Pentagon();
 			this.shape.OnChange(this.spriteRendererRef);
 		}
-		if (Input.GetKeyDown(KeyCode.Alpha5))
+		if (Input.GetKeyDown(KeyCode.Alpha5) && !this.shape.IsPlayingAnimations())
 		{
 			this.shape = new Deltoid();
 			this.shape.OnChange(this.spriteRendererRef);
@@ -168,5 +187,10 @@ public class PlayerScript : MonoBehaviour
 		this.rigidBodyRef.velocity = vector2;
 		// Ruch koniec
 
+	}
+	public void TakeDamage(float amount)
+	{
+		this.hp -= amount;
+		Debug.Log($"Gracz otrzymał obrażenia: {amount} pozostało: {this.hp}");
 	}
 }

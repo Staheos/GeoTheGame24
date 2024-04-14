@@ -12,17 +12,17 @@ public class TriangleEnemyScript : MonoBehaviour
 	public float moveDistance;
 	public const float STANDARD_ROTATION = -90f;
 	public float MAX_HP;
-	public float hp;
+	private float hp;
 	public Rigidbody2D enemyBulletPatternRef;
 
 	public float attackTime = 2f;
-	public float attackCooldown = 0f;
+	private float attackCooldown = 0f;
 	public float bulletVelocity = 10f;
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		this.hp = this.MAX_HP;   
+		this.hp = this.MAX_HP;
 	}
 
 	// Update is called once per frame
@@ -41,18 +41,18 @@ public class TriangleEnemyScript : MonoBehaviour
 
 		Vector2 vel = playerTransform.localPosition - this.transform.position;
 
-        float angle = Mathf.Atan2(vel.y, vel.x) * 180f / Mathf.PI;
-        if (angle < 0)
-        {
-            angle += 360f;
-        }
-        angle += STANDARD_ROTATION;
-        this.rigidbodyRef.rotation = angle;
-
-        if (vel.magnitude > this.moveDistance)
+		float angle = Mathf.Atan2(vel.y, vel.x) * 180f / Mathf.PI;
+		if (angle < 0)
 		{
-            vel.Normalize();
-            vel *= this.moveVelocity;
+			angle += 360f;
+		}
+		angle += STANDARD_ROTATION;
+		this.rigidbodyRef.rotation = angle;
+
+		if (vel.magnitude > this.moveDistance)
+		{
+			vel.Normalize();
+			vel *= this.moveVelocity;
 			this.rigidbodyRef.velocity = vel;
 		}
 		else
@@ -61,8 +61,8 @@ public class TriangleEnemyScript : MonoBehaviour
 
 			if (this.attackCooldown <= 0f)
 			{
-                vel.Normalize();
-                this.attackCooldown = this.attackTime;
+				vel.Normalize();
+				this.attackCooldown = this.attackTime;
 				var enemyBullet = UnityEngine.Object.Instantiate<Rigidbody2D>(this.enemyBulletPatternRef, this.transform.position, this.transform.rotation);
 				float rot = enemyBullet.rotation + STANDARD_ROTATION;
 				if (rot < 0)

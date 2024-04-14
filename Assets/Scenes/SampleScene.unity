@@ -394,14 +394,12 @@ MonoBehaviour:
   activated: 0
   playerRigitbodyRef: {fileID: 1300003078}
   rigidbodyRef: {fileID: 965972128}
-  moveVelocity: 3
-  moveDistance: 5
+  moveVelocity: 4
+  moveDistance: 7
   MAX_HP: 3
-  hp: 3
   enemyBulletPatternRef: {fileID: 1897562291}
-  attackTime: 2
-  attackCooldown: 2
-  bulletVelocity: 3
+  attackTime: 1.5
+  bulletVelocity: 8
 --- !u!212 &965972126
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -755,6 +753,7 @@ MonoBehaviour:
   spriteRendererRef: {fileID: 1300003076}
   Bullet: {fileID: 1121439573}
   ememyTrianglePatternRef: {fileID: 965972128}
+  MAX_HP: 10
 --- !u!1 &1362300469
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,6 +914,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11647f1308d5f914987aa522356b313a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distance: 1
+  damage: 1
 --- !u!212 &1897562293
 SpriteRenderer:
   m_ObjectHideFlags: 0

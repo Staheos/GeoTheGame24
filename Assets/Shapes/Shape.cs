@@ -23,6 +23,9 @@ public class Shape
 
 	public float projectileVelocity;
 
+	public float attackDistance;
+	public float damage;
+
 	public Shape()
 	{
 		this.playingAnimationLMB = false;
@@ -37,7 +40,22 @@ public class Shape
 
 		this.projectileVelocity = 16f;
 	}
-
+	public bool IsPlayingAnimations()
+	{
+		if (this.playingAnimationLMB)
+		{
+			return true;
+		}
+		if (this.playingAnimationRMB)
+		{
+			return true;
+		}
+		if (this.playingAnimationR)
+		{
+			return true;
+		}
+		return false;
+	}
 	public virtual void OnChange(SpriteRenderer spriteRenderer)
 	{
 		Debug.Log(Resources.Load<Sprite>("TriangleSceneSprite"));
@@ -90,11 +108,14 @@ public class Shape
 	{
 		if (this.cooldownLMB <= 0)
 		{
-			this.ActionLeftMouseButton(rigidbody2D, bulletPattern);
-			this.cooldownLMB = 0.3f;
+			if (!this.playingAnimationLMB)
+			{
+				this.startScale = rigidbody2D.transform.localScale;
+			}
+			this.cooldownLMB = 0.1f;
 			this.playingAnimationLMB = true;
 			this.animationTimeLMB = 0;
-			this.startScale = rigidbody2D.transform.localScale;
+			this.ActionLeftMouseButton(rigidbody2D, bulletPattern);
 		}
 	}
 	public virtual void OnRightMouseButton(float dt)
@@ -117,20 +138,8 @@ public class Shape
 	}
 	public virtual void ActionLeftMouseButton(Rigidbody2D player, Rigidbody2D bulletPattern)
 	{
-        //var bullet = Instantiate(Bullet, transform.position, transform.rotation);
-        var bullet = UnityEngine.Object.Instantiate<Rigidbody2D>(bulletPattern, player.transform.position, player.transform.rotation);
-        //bullet.velocity = new Vector2((float)Math.Cos(angle), (float)Math.Cos(angle));
-        float rot = bullet.rotation;
-        if (rot < 0)
-        {
-            rot += 360;
-        }
-        rot = (float)(rot * Math.PI / 180f);
-        bullet.velocity = new Vector2((float)Math.Cos(rot), (float)Math.Sin(rot)) * this.projectileVelocity;
-		var bulletScript = bullet.GetComponent<BulletScript>();
-		bulletScript.DestroyAfter(5f);
-		bulletScript.Activate();
-    }
+		
+	}
 	public virtual void ActionRightMouseButton()
 	{
 
@@ -142,7 +151,7 @@ public class Shape
 	public virtual void AnimationLeftMouseButton(float dt, Rigidbody2D rigidbody2D)
 	{
 		// jeżeli zakończono animację, należy zmienić playingAnimation na false
-		this.animationTimeLMB += dt * 4f;
+		this.animationTimeLMB += dt * 5f;
 		if (this.animationTimeLMB >= 1)
 		{
 			this.animationTimeLMB = 1;
