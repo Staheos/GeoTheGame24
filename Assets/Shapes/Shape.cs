@@ -127,7 +127,9 @@ public class Shape
         }
         rot = (float)(rot * Math.PI / 180f);
         bullet.velocity = new Vector2((float)Math.Cos(rot), (float)Math.Sin(rot)) * this.projectileVelocity;
-		bullet.GetComponent<BulletScript>().DestroyAfter(5f);
+		var bulletScript = bullet.GetComponent<BulletScript>();
+		bulletScript.DestroyAfter(5f);
+		bulletScript.Activate();
     }
 	public virtual void ActionRightMouseButton()
 	{

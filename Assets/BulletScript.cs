@@ -8,6 +8,7 @@ public class BulletScript : MonoBehaviour
 	public Rigidbody2D triangleEnemyPatternRef;
 	public float damageDistance;
 	public float damage;
+	private bool active = false;
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -17,26 +18,28 @@ public class BulletScript : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		var objs = FindObjectsByType<TriangleEnemyScript>(FindObjectsSortMode.None);
-        Debug.Log($"Length: {objs.Length}");
-        if (objs.Length > 1)
+		if (this.active)
 		{
-            int min = 1;
-            for (int i = 0; i < objs.Length; i++)
+            var objs = FindObjectsByType<TriangleEnemyScript>(FindObjectsSortMode.None);
+            if (objs.Length > 1)
             {
-				if (!objs[i].activated)
-				{
-					continue;
-				}
-                if ((objs[i].gameObject.transform.position - this.transform.position).magnitude <= (objs[i].gameObject.transform.position - this.transform.position).magnitude)
+                int min = 1;
+                for (int i = 0; i < objs.Length; i++)
                 {
-                    min = i;
+                    if (!objs[i].activated)
+                    {
+                        continue;
+                    }
+                    if ((objs[i].gameObject.transform.position - this.transform.position).magnitude <= (objs[min].gameObject.transform.position - this.transform.position).magnitude)
+                    {
+                        min = i;
+                    }
                 }
-            }
-            if ((objs[min].gameObject.transform.position - this.transform.position).magnitude <= this.damageDistance)
-            {
-                objs[min].TakeDamage(this.damage);
-                Destroy(this.gameObject);
+                if ((objs[min].gameObject.transform.position - this.transform.position).magnitude <= this.damageDistance)
+                {
+                    objs[min].TakeDamage(this.damage);
+                    Destroy(this.gameObject);
+                }
             }
         }
 	}
@@ -44,5 +47,10 @@ public class BulletScript : MonoBehaviour
 	public void DestroyAfter(float time)
 	{
 		Destroy(gameObject, time);
+	}
+
+	public void Activate()
+	{
+		this.active = true;
 	}
 }
