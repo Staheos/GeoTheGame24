@@ -18,18 +18,26 @@ public class BulletScript : MonoBehaviour
 	void Update()
 	{
 		var objs = FindObjectsByType<TriangleEnemyScript>(FindObjectsSortMode.None);
-		int min = 0;
-		for (int i = 0; i < objs.Length; i++)
+        Debug.Log($"Length: {objs.Length}");
+        if (objs.Length > 1)
 		{
-			if ((objs[i].gameObject.transform.position - this.transform.position).magnitude < (objs[i].gameObject.transform.position - this.transform.position).magnitude)
-			{
-				min = i;
-			}
-		}
-		if ((objs[min].gameObject.transform.position - this.transform.position).magnitude <= this.damageDistance)
-		{
-			objs[min].TakeDamage(this.damage);
-			Destroy(this.gameObject);
+            int min = 1;
+            for (int i = 0; i < objs.Length; i++)
+            {
+				if (!objs[i].activated)
+				{
+					continue;
+				}
+                if ((objs[i].gameObject.transform.position - this.transform.position).magnitude <= (objs[i].gameObject.transform.position - this.transform.position).magnitude)
+                {
+                    min = i;
+                }
+            }
+            if ((objs[min].gameObject.transform.position - this.transform.position).magnitude <= this.damageDistance)
+            {
+                objs[min].TakeDamage(this.damage);
+                Destroy(this.gameObject);
+            }
         }
 	}
 

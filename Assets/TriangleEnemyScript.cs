@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class TriangleEnemyScript : MonoBehaviour
 {
-    public bool activated;
+    public bool activated = false;
     public Rigidbody2D playerRigitbodyRef;
     public Rigidbody2D rigidbodyRef;
     public float bulletVelocity;
@@ -38,7 +38,6 @@ public class TriangleEnemyScript : MonoBehaviour
         if (vel.magnitude > this.moveDistance)
         {
             vel.Normalize();
-            Debug.Log(vel);
             vel *= this.bulletVelocity;
             this.rigidbodyRef.velocity = vel;
         }
