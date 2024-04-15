@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Square : Shape
 {
-    public Square() : base()
+    public Square(AudioClip audioClip) : base(audioClip)
     {
-        this.projectileVelocity = 15f;
-        this.damage = 1;
+        this.projectileVelocity = 32f;
+        this.damage = 5;
+        this.attackSpeed = 1f;
+    }
+    public override float CalcDamage(float raw)
+    {
+        return raw * 1f;
     }
     public override void OnChange(SpriteRenderer spriteRenderer)
     {

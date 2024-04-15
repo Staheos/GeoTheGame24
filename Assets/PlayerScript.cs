@@ -19,6 +19,13 @@ public class PlayerScript : MonoBehaviour
 	public GameObject HPbarRef;
 	public GameObject HPframeRef;
 
+	public AudioSource audioSource;
+	public AudioClip audioDamage;
+	public AudioClip audioCircle;
+	public AudioClip audioSquare;
+	public AudioClip audioTriangle;
+	public AudioClip audioMusic;
+
 	public float MAX_HP;
 	public float hp;
 	public float regen = 0f;
@@ -28,25 +35,28 @@ public class PlayerScript : MonoBehaviour
 	private bool pressedA;
 	private bool pressedD;
 
+	private double totalTime = 0;
+
 	private float trg_cd = 0;
+
+	private float musicCooldown = 0;
 
 	private float enemyTriangleSpawnCooldown = 0;
 	private int spawnPointIndex = 0;
 	private Vector2[] spawnPoints = { 
 		// rogi mapy
-		new Vector2(-44, 27),
-		new Vector2(-44, -27),
-		new Vector2(44, 27),
-		new Vector2(44, -27),
+		new Vector2(-80, 46),
+		new Vector2(-80, -46),
+		new Vector2(80, 46),
+		new Vector2(80, -46),
 		// środki boków
-		new Vector2(22, -0),
-		new Vector2(-22, 0),
-		new Vector2(0, 13.5f),
-		new Vector2(0, -13.5f),
+		new Vector2(40, 0),
+		new Vector2(-40, 0),
+		new Vector2(0, 23),
+		new Vector2(0, -23),
 	};
-
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
 	{
 		this.pressedW = false;
 		this.pressedS = false;
@@ -59,7 +69,10 @@ public class PlayerScript : MonoBehaviour
 		this.rigidBodyRef.rotation = 0;
 		this.HPframeRef.SetActive(false);
 		this.HPbarRef.SetActive(false);
-	}
+		this.totalTime = 0;
+		this.musicCooldown = 0;
+        this.gameObject.transform.localScale = Vector3.one;
+    }
 
 	// Update is called once per frame
 	void Update()
@@ -67,9 +80,17 @@ public class PlayerScript : MonoBehaviour
 		// DLA WSZYSTKIEGO (MENU I GRY)
         SpawnEnemyIfCooldown(Time.deltaTime);
 
+		this.musicCooldown -= Time.deltaTime;
+		if (this.musicCooldown <= 0)
+		{
+            this.audioSource.PlayOneShot(this.audioMusic);
+			this.musicCooldown = 193f;
+        }
+
         // DLA MENU
         if (this.menuMode)
 		{
+			this.gameObject.transform.localScale = Vector3.one / 2;
 			if (Input.GetKey(KeyCode.Return)) 
 			{
 				// destroy old objects
@@ -94,9 +115,10 @@ public class PlayerScript : MonoBehaviour
 				this.hp = MAX_HP;
 				this.HPframeRef.SetActive(true);
 				this.HPbarRef.SetActive(true);
-				this.shape = new Triangle();
+				this.shape = new Triangle(this.audioTriangle);
 				this.shape.OnChange(this.spriteRendererRef);
-				this.menuMode = false;
+                this.gameObject.transform.localScale = Vector3.one;
+                this.menuMode = false;
 			}
 		}
 		else
@@ -110,12 +132,12 @@ public class PlayerScript : MonoBehaviour
 			}
 			this.hp = Mathf.Min(this.MAX_HP, this.hp + regen * Time.deltaTime);
 
-            if (Input.GetKey(KeyCode.F) && this.trg_cd <= 0)
-			{
-				this.trg_cd = 0.1f;
-				var newEnemy = UnityEngine.Object.Instantiate<Rigidbody2D>(this.ememyTrianglePatternRef, this.transform.position, this.transform.rotation);
-				newEnemy.GetComponent<TriangleEnemyScript>().Activate();
-			}
+   //         if (Input.GetKey(KeyCode.F) && this.trg_cd <= 0)
+			//{
+			//	this.trg_cd = 0.1f;
+			//	var newEnemy = UnityEngine.Object.Instantiate<Rigidbody2D>(this.ememyTrianglePatternRef, this.transform.position, this.transform.rotation);
+			//	newEnemy.GetComponent<TriangleEnemyScript>().Activate();
+			//}
 			this.trg_cd -= Time.deltaTime;
 			if (this.trg_cd <= 0)
 			{
@@ -136,7 +158,7 @@ public class PlayerScript : MonoBehaviour
 			//}
 			if (Input.GetKey(KeyCode.Mouse0))
 			{
-				this.shape.OnLeftMouseButton(Time.deltaTime, this.rigidBodyRef, this.Bullet, this.squeareBulletPattern);
+				this.shape.OnLeftMouseButton(Time.deltaTime, this.rigidBodyRef, this.Bullet, this.squeareBulletPattern, this.audioSource);
 			}
 			if (Input.GetKeyDown(KeyCode.Mouse1))
 			{
@@ -150,29 +172,29 @@ public class PlayerScript : MonoBehaviour
 			// zmiana kształtu
 			if (Input.GetKeyDown(KeyCode.Alpha1) && !this.shape.IsPlayingAnimations())
 			{
-				this.shape = new Triangle();
+				this.shape = new Triangle(this.audioTriangle);
 				this.shape.OnChange(this.spriteRendererRef);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha2) && !this.shape.IsPlayingAnimations())
 			{
-				this.shape = new Circle();
+				this.shape = new Circle(this.audioCircle);
 				this.shape.OnChange(this.spriteRendererRef);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha3) && !this.shape.IsPlayingAnimations())
 			{
-				this.shape = new Square();
+				this.shape = new Square(this.audioSquare);
 				this.shape.OnChange(this.spriteRendererRef);
 			}
-			if (Input.GetKeyDown(KeyCode.Alpha4) && !this.shape.IsPlayingAnimations())
-			{
-				this.shape = new Pentagon();
-				this.shape.OnChange(this.spriteRendererRef);
-			}
-			if (Input.GetKeyDown(KeyCode.Alpha5) && !this.shape.IsPlayingAnimations())
-			{
-				this.shape = new Deltoid();
-				this.shape.OnChange(this.spriteRendererRef);
-			}
+			//if (Input.GetKeyDown(KeyCode.Alpha4) && !this.shape.IsPlayingAnimations())
+			//{
+			//	this.shape = new Pentagon();
+			//	this.shape.OnChange(this.spriteRendererRef);
+			//}
+			//if (Input.GetKeyDown(KeyCode.Alpha5) && !this.shape.IsPlayingAnimations())
+			//{
+			//	this.shape = new Deltoid();
+			//	this.shape.OnChange(this.spriteRendererRef);
+			//}
 
 			if (mouse.x < 0 && mouse.y < 0)
 			{
@@ -257,7 +279,8 @@ public class PlayerScript : MonoBehaviour
 	}
 	public void TakeDamage(float amount)
 	{
-		this.hp = Mathf.Max(0, this.hp - amount);
+		this.hp = Mathf.Max(0, this.hp - this.shape.CalcDamage(amount));
+		this.audioSource.PlayOneShot(this.audioDamage);
 	}
 
 	public void SpawnEnemyIfCooldown(float dt)
@@ -287,9 +310,10 @@ public class PlayerScript : MonoBehaviour
 	public float CalculateSpawnEnemyCooldown(float dt)
 	{
 		float val;
+		this.totalTime += dt;
 
-		val = 1 / dt * 120;
-		val = Mathf.Min(4, val);
+		val = (float)(1 / this.totalTime * 30);
+		val = Mathf.Min(2.5f, val);
 		return val;
 	}
 }

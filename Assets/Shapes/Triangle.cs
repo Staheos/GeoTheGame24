@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class Triangle : Shape
 {
-	public Triangle() : base()
+	public Triangle(AudioClip audioClip) : base(audioClip)
 	{
-		this.projectileVelocity = 30f;
+		this.projectileVelocity = 20f;
 		this.damage = 1;
+		this.attackSpeed = 0.2f;
 	}
-	public override void OnChange(SpriteRenderer spriteRenderer)
+    public override float CalcDamage(float raw)
+    {
+        return raw * 1f;
+    }
+    public override void OnChange(SpriteRenderer spriteRenderer)
 	{
 		Debug.Log(Resources.Load<Sprite>("TriangleSceneSprite"));
 

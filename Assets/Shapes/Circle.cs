@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Circle : Shape
 {
-    public Circle() : base()
+    public Circle(AudioClip audioClip) : base(audioClip)
     {
-        this.attackDistance = 1f;
-        this.damage = 1f;
+        this.attackDistance = 1.6f;
+        this.damage = 3f;
+        this.attackSpeed = 0.3f;
+    }
+    public override float CalcDamage(float raw)
+    {
+        return raw * 0.5f;
     }
     public override void OnChange(SpriteRenderer spriteRenderer)
     {
