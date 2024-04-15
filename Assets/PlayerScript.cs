@@ -15,7 +15,7 @@ public class PlayerScript : MonoBehaviour
 	public Rigidbody2D ememyTrianglePatternRef;
 
 	public float MAX_HP;
-	private float hp;
+	public float hp;
 
 	private bool pressedW;
 	private bool pressedS;
@@ -130,7 +130,6 @@ public class PlayerScript : MonoBehaviour
 
 		// śledzenie kamery
 		Camera.main.transform.SetPositionAndRotation(new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, Camera.main.transform.position.z), Camera.main.transform.rotation);
-
 		// Ruch
 		if (Input.GetKeyDown(KeyCode.W))
 		{
