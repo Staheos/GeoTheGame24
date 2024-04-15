@@ -22,7 +22,6 @@ public class Shape
 	public float animationTimeLMB;
 
 	public float projectileVelocity;
-
 	public float attackDistance;
 	public float damage;
 
@@ -104,7 +103,7 @@ public class Shape
 			this.AnimationR(dt);
 		}
 	}
-	public virtual void OnLeftMouseButton(float dt, Rigidbody2D rigidbody2D, Rigidbody2D bulletPattern)
+	public virtual void OnLeftMouseButton(float dt, Rigidbody2D rigidbody2D, Rigidbody2D bulletPattern, Rigidbody2D squeareBulletPattern)
 	{
 		if (this.cooldownLMB <= 0)
 		{
@@ -115,7 +114,7 @@ public class Shape
 			this.cooldownLMB = 0.1f;
 			this.playingAnimationLMB = true;
 			this.animationTimeLMB = 0;
-			this.ActionLeftMouseButton(rigidbody2D, bulletPattern);
+			this.ActionLeftMouseButton(rigidbody2D, bulletPattern, squeareBulletPattern);
 		}
 	}
 	public virtual void OnRightMouseButton(float dt)
@@ -136,7 +135,7 @@ public class Shape
 			this.playingAnimationR = true;
 		}
 	}
-	public virtual void ActionLeftMouseButton(Rigidbody2D player, Rigidbody2D bulletPattern)
+	public virtual void ActionLeftMouseButton(Rigidbody2D player, Rigidbody2D bulletPattern, Rigidbody2D squeareBulletPattern)
 	{
 		
 	}

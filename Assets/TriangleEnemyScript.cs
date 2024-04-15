@@ -17,7 +17,7 @@ public class TriangleEnemyScript : MonoBehaviour
 
 	public float attackTime = 2f;
 	private float attackCooldown = 0f;
-	public float bulletVelocity = 10f;
+	public float bulletVelocity = 20f;
 
 	// Start is called before the first frame update
 	void Start()

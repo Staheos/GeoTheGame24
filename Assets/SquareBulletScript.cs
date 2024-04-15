@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletScript : MonoBehaviour
+public class SquareBulletScript : MonoBehaviour
 {
 	public Rigidbody2D rigidBodyRef;
 	public Rigidbody2D triangleEnemyPatternRef;
@@ -34,7 +34,6 @@ public class BulletScript : MonoBehaviour
                     if ((objs[i].gameObject.transform.position - this.transform.position).magnitude <= (objs[min].gameObject.transform.position - this.transform.position).magnitude)
                     {
                         min = i;
-                        Debug.Log($"found damage: {(objs[min].gameObject.transform.position - this.transform.position).magnitude}");
                     }
                 }
                 if ((objs[min].gameObject.transform.position - this.transform.position).magnitude <= this.damageDistance)
@@ -49,8 +48,7 @@ public class BulletScript : MonoBehaviour
     {
         this.damage = newDamage;
     }
-
-	public void DestroyAfter(float time)
+    public void DestroyAfter(float time)
 	{
 		Destroy(gameObject, time);
 	}

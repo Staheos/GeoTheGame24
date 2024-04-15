@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Triangle : Shape
 {
-
 	public Triangle() : base()
 	{
-
+		this.projectileVelocity = 30f;
+		this.damage = 1;
 	}
 	public override void OnChange(SpriteRenderer spriteRenderer)
 	{
@@ -45,7 +45,7 @@ public class Triangle : Shape
 		}
 		return val;
 	}
-    public override void ActionLeftMouseButton(Rigidbody2D player, Rigidbody2D bulletPattern)
+    public override void ActionLeftMouseButton(Rigidbody2D player, Rigidbody2D bulletPattern, Rigidbody2D squeareBulletPattern)
     {
         //var bullet = Instantiate(Bullet, transform.position, transform.rotation);
         var bullet = UnityEngine.Object.Instantiate<Rigidbody2D>(bulletPattern, player.transform.position, player.transform.rotation);
@@ -58,6 +58,7 @@ public class Triangle : Shape
         rot = (float)(rot * Mathf.PI / 180f);
         bullet.velocity = new Vector2((float)Mathf.Cos(rot), (float)Mathf.Sin(rot)) * this.projectileVelocity;
         var bulletScript = bullet.GetComponent<BulletScript>();
+		bulletScript.SetDamage(this.damage);
         bulletScript.DestroyAfter(5f);
         bulletScript.Activate();
     }

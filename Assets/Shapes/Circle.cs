@@ -12,14 +12,7 @@ public class Circle : Shape
     public override void OnChange(SpriteRenderer spriteRenderer)
     {
         Debug.Log(Resources.Load<Sprite>("CircleShapeSprite"));
-
-        //Texture2D tex = Resources.Load<Texture2D>("TrangleShapeSprite");
-        //spriteRenderer.sprite = Sprite.Create(tex, new Rect(0, 0, 128, 128), spriteRenderer.sprite.pivot);
-
         spriteRenderer.sprite = Resources.Load<Sprite>("CircleShapeSprite");
-        //spriteRenderer.sprite = Sprite.Create()
-        // doda� tekstury odpowiednich kszta�t�w
-        //spriteRenderer.sprite = Sprite.Create()
     }
     public override void AnimationLeftMouseButton(float dt, Rigidbody2D rigidbody2D)
     {
@@ -40,7 +33,7 @@ public class Circle : Shape
         }
         return val;
     }
-    public override void ActionLeftMouseButton(Rigidbody2D player, Rigidbody2D bulletPattern)
+    public override void ActionLeftMouseButton(Rigidbody2D player, Rigidbody2D bulletPattern, Rigidbody2D squeareBulletPattern)
     {
         var objs = UnityEngine.Object.FindObjectsByType<TriangleEnemyScript>(FindObjectsSortMode.None);
         for (int i = 0; i < objs.Length; i++)
