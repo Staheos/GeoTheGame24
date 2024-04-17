@@ -21,13 +21,13 @@ public class SquareBulletScript : MonoBehaviour
 	{
 		if (this.active)
 		{
-            var objs = FindObjectsByType<TriangleEnemyScript>(FindObjectsSortMode.None);
+            var objs = FindObjectsByType<EnemyScript>(FindObjectsSortMode.None);
             if (objs.Length > 1)
             {
                 int min = 1;
                 for (int i = 0; i < objs.Length; i++)
                 {
-                    if (!objs[i].activated)
+                    if (!objs[i].Active)
                     {
                         continue;
                     }

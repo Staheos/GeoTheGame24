@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Circle : Shape
 {
-    public Circle(AudioClip audioClip) : base(audioClip)
+    public Circle(BulletShooterType shooterType, AudioClip audioClip) : base(shooterType, audioClip)
     {
         this.attackDistance = 1.6f;
         this.damage = 3f;
@@ -40,10 +40,10 @@ public class Circle : Shape
     }
     public override void ActionLeftMouseButton(Rigidbody2D player, Rigidbody2D bulletPattern, Rigidbody2D squeareBulletPattern)
     {
-        var objs = UnityEngine.Object.FindObjectsByType<TriangleEnemyScript>(FindObjectsSortMode.None);
+        var objs = UnityEngine.Object.FindObjectsByType<EnemyScript>(FindObjectsSortMode.None);
         for (int i = 0; i < objs.Length; i++)
         {
-            if (!objs[i].activated)
+            if (!objs[i].Active)
             {
                 continue;
             }

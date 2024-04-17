@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,11 +26,12 @@ public class Shape
 	public float projectileVelocity;
 	public float attackDistance;
 	public float damage;
+	protected BulletShooterType bulletShooterType;
 
 	protected float attackSpeed = 1;
 
-	public AudioClip audioClip;
-	public Shape(AudioClip audioClip)
+	public AudioClip? audioClip;
+	public Shape(BulletShooterType shooterType, AudioClip? audioClip = null)
 	{
 		this.playingAnimationLMB = false;
 		this.playingAnimationRMB = false;
@@ -42,6 +45,7 @@ public class Shape
 
 		this.projectileVelocity = 16f;
 
+		this.bulletShooterType = shooterType;
 		this.audioClip = audioClip;
 	}
 	public bool IsPlayingAnimations()
@@ -60,7 +64,6 @@ public class Shape
 		}
 		return false;
 	}
-
 	public virtual float CalcDamage(float raw)
 	{
 		return raw;
@@ -113,19 +116,22 @@ public class Shape
 			this.AnimationR(dt);
 		}
 	}
-	public virtual void OnLeftMouseButton(float dt, Rigidbody2D rigidbody2D, Rigidbody2D bulletPattern, Rigidbody2D squeareBulletPattern, AudioSource audioSource)
+	public virtual void OnLeftMouseButton(float dt, Rigidbody2D ownerRigitbody, Rigidbody2D bulletPattern, Rigidbody2D squeareBulletPattern, AudioSource? audioSource = null)
 	{
 		if (this.cooldownLMB <= 0)
 		{
 			if (!this.playingAnimationLMB)
 			{
-				this.startScale = rigidbody2D.transform.localScale;
+				this.startScale = ownerRigitbody.transform.localScale;
 			}
 			this.cooldownLMB = this.attackSpeed;
 			this.playingAnimationLMB = true;
 			this.animationTimeLMB = 0;
-			audioSource.PlayOneShot(this.audioClip);
-			this.ActionLeftMouseButton(rigidbody2D, bulletPattern, squeareBulletPattern);
+			if (audioSource != null)
+			{
+                audioSource.PlayOneShot(this.audioClip);
+            }
+			this.ActionLeftMouseButton(ownerRigitbody, bulletPattern, squeareBulletPattern);
 		}
 	}
 	public virtual void OnRightMouseButton(float dt)

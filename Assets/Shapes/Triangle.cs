@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+#nullable enable
 public class Triangle : Shape
 {
-	public Triangle(AudioClip audioClip) : base(audioClip)
+	public Triangle(BulletShooterType shooterType, AudioClip? audioClip = null) : base(shooterType, audioClip)
 	{
 		this.projectileVelocity = 20f;
 		this.damage = 1;
@@ -65,6 +65,6 @@ public class Triangle : Shape
         var bulletScript = bullet.GetComponent<BulletScript>();
 		bulletScript.SetDamage(this.damage);
         bulletScript.DestroyAfter(5f);
-        bulletScript.Activate();
+        bulletScript.Activate(this.bulletShooterType);
     }
 }

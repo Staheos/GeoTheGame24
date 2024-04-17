@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Square : Shape
 {
-    public Square(AudioClip audioClip) : base(audioClip)
+    public Square(BulletShooterType shooterType, AudioClip audioClip) : base(shooterType, audioClip)
     {
         this.projectileVelocity = 32f;
         this.damage = 5;

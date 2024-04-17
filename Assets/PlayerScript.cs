@@ -16,6 +16,7 @@ public class PlayerScript : MonoBehaviour
 	public Rigidbody2D Bullet;
 	public Rigidbody2D squeareBulletPattern;
 	public Rigidbody2D ememyTrianglePatternRef;
+	public Rigidbody2D enemyPatternRef;
 	public GameObject HPbarRef;
 	public GameObject HPframeRef;
 
@@ -55,8 +56,8 @@ public class PlayerScript : MonoBehaviour
 		new Vector2(0, 23),
 		new Vector2(0, -23),
 	};
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
 	{
 		this.pressedW = false;
 		this.pressedS = false;
@@ -71,41 +72,41 @@ public class PlayerScript : MonoBehaviour
 		this.HPbarRef.SetActive(false);
 		this.totalTime = 0;
 		this.musicCooldown = 0;
-        this.gameObject.transform.localScale = Vector3.one;
-    }
+		this.gameObject.transform.localScale = Vector3.one;
+	}
 
 	// Update is called once per frame
 	void Update()
 	{
 		// DLA WSZYSTKIEGO (MENU I GRY)
-        SpawnEnemyIfCooldown(Time.deltaTime);
+		SpawnEnemyIfCooldown(Time.deltaTime);
 
 		this.musicCooldown -= Time.deltaTime;
 		if (this.musicCooldown <= 0)
 		{
-            this.audioSource.PlayOneShot(this.audioMusic);
+			this.audioSource.PlayOneShot(this.audioMusic);
 			this.musicCooldown = 193f;
-        }
+		}
 
-        // DLA MENU
-        if (this.menuMode)
+		// DLA MENU
+		if (this.menuMode)
 		{
 			this.gameObject.transform.localScale = Vector3.one / 2;
 			if (Input.GetKey(KeyCode.Return)) 
 			{
 				// destroy old objects
-				var objs = UnityEngine.Object.FindObjectsByType<TriangleEnemyScript>(FindObjectsSortMode.None);
+				var objs = UnityEngine.Object.FindObjectsByType<EnemyScript>(FindObjectsSortMode.None);
 				for (int i = 0; i < objs.Length; i++)
 				{
-					if (!objs[i].activated)
+					if (!objs[i].Active)
 					{
 						continue;
 					}
 					Destroy(objs[i].gameObject);
 				}
-				foreach (var obj in UnityEngine.Object.FindObjectsByType<EnemyBulletScript>(FindObjectsSortMode.None))
+				foreach (var obj in UnityEngine.Object.FindObjectsByType<BulletScript>(FindObjectsSortMode.None))
 				{
-					if (!obj.activated)
+					if (!obj.Active)
 					{
 						continue;
 					}
@@ -115,14 +116,15 @@ public class PlayerScript : MonoBehaviour
 				this.hp = MAX_HP;
 				this.HPframeRef.SetActive(true);
 				this.HPbarRef.SetActive(true);
-				this.shape = new Triangle(this.audioTriangle);
+				this.shape = new Triangle(BulletShooterType.PLAYER, this.audioTriangle);
 				this.shape.OnChange(this.spriteRendererRef);
-                this.gameObject.transform.localScale = Vector3.one;
-                this.menuMode = false;
+				this.gameObject.transform.localScale = Vector3.one;
+				this.menuMode = false;
 			}
 		}
 		else
 		{
+			// dla gry (nie menu)
 			if (this.hp <= 0)
 			{
 				this.menuMode = true;
@@ -132,7 +134,9 @@ public class PlayerScript : MonoBehaviour
 			}
 			this.hp = Mathf.Min(this.MAX_HP, this.hp + regen * Time.deltaTime);
 
-   //         if (Input.GetKey(KeyCode.F) && this.trg_cd <= 0)
+			this.totalTime += Time.deltaTime;
+
+			//         if (Input.GetKey(KeyCode.F) && this.trg_cd <= 0)
 			//{
 			//	this.trg_cd = 0.1f;
 			//	var newEnemy = UnityEngine.Object.Instantiate<Rigidbody2D>(this.ememyTrianglePatternRef, this.transform.position, this.transform.rotation);
@@ -172,17 +176,17 @@ public class PlayerScript : MonoBehaviour
 			// zmiana kształtu
 			if (Input.GetKeyDown(KeyCode.Alpha1) && !this.shape.IsPlayingAnimations())
 			{
-				this.shape = new Triangle(this.audioTriangle);
+				this.shape = new Triangle(BulletShooterType.PLAYER, this.audioTriangle);
 				this.shape.OnChange(this.spriteRendererRef);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha2) && !this.shape.IsPlayingAnimations())
 			{
-				this.shape = new Circle(this.audioCircle);
+				this.shape = new Circle(BulletShooterType.PLAYER, this.audioCircle);
 				this.shape.OnChange(this.spriteRendererRef);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha3) && !this.shape.IsPlayingAnimations())
 			{
-				this.shape = new Square(this.audioSquare);
+				this.shape = new Square(BulletShooterType.PLAYER, this.audioSquare);
 				this.shape.OnChange(this.spriteRendererRef);
 			}
 			//if (Input.GetKeyDown(KeyCode.Alpha4) && !this.shape.IsPlayingAnimations())
@@ -302,17 +306,17 @@ public class PlayerScript : MonoBehaviour
 			position.y = position.y + randomizer;
 
 			this.spawnPointIndex += 1;
-            var newEnemy = UnityEngine.Object.Instantiate<Rigidbody2D>(this.ememyTrianglePatternRef, position, this.transform.rotation);
-            newEnemy.GetComponent<TriangleEnemyScript>().Activate();
+			var newEnemy = UnityEngine.Object.Instantiate<Rigidbody2D>(this.enemyPatternRef, position, this.transform.rotation);
+			//newEnemy.GetComponent<TriangleEnemyScript>().Activate();
+			newEnemy.GetComponent<EnemyScript>().Activate();
 			this.enemyTriangleSpawnCooldown = this.CalculateSpawnEnemyCooldown(dt);
-        }
+		}
 	}
 	public float CalculateSpawnEnemyCooldown(float dt)
 	{
 		float val;
-		this.totalTime += dt;
 
-		val = (float)(1 / this.totalTime * 30);
+		val = (float)(1 / this.totalTime * 60);
 		val = Mathf.Min(2.5f, val);
 		return val;
 	}
