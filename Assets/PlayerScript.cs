@@ -308,7 +308,7 @@ public class PlayerScript : MonoBehaviour
 			this.spawnPointIndex += 1;
 			var newEnemy = UnityEngine.Object.Instantiate<Rigidbody2D>(this.enemyPatternRef, position, this.transform.rotation);
 			//newEnemy.GetComponent<TriangleEnemyScript>().Activate();
-			newEnemy.GetComponent<EnemyScript>().Activate();
+			newEnemy.GetComponent<EnemyScript>().Activate(new Triangle(BulletShooterType.ENEMY));
 			this.enemyTriangleSpawnCooldown = this.CalculateSpawnEnemyCooldown(dt);
 		}
 	}

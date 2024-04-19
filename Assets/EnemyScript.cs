@@ -65,10 +65,11 @@ public class EnemyScript : MonoBehaviour
 	{
 		this.hp -= amount;
 	}
-	public void Activate()
+	public void Activate(Shape shape)
 	{
 		this.active = true;
-        this.shape = new Triangle(BulletShooterType.ENEMY);
+        //this.shape = new Triangle(BulletShooterType.ENEMY);
+		this.shape = shape;
         this.shape.OnChange(this.spriteRendererRef);
     }
 }
