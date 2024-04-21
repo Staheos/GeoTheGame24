@@ -6,13 +6,13 @@ public class Circle : Shape
 {
     public Circle(BulletShooterType shooterType, AudioClip audioClip) : base(shooterType, audioClip)
     {
-        this.attackDistance = 1.6f;
-        this.damage = 3f;
+        this.attackDistance = 2.1f;
+        this.damage = 4f;
         this.attackSpeed = 0.3f;
     }
     public override float CalcDamage(float raw)
     {
-        return raw * 0.5f;
+        return raw * 0.4f;
     }
     public override void OnChange(SpriteRenderer spriteRenderer)
     {
