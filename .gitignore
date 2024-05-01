@@ -4,6 +4,8 @@
 .vs/
 [Dd]ebug/
 [Rr]ealese/
+/Server/Server/x64/
+/Server/x64/
 
 # This .gitignore file should be placed at the root of your Unity project directory
 #
