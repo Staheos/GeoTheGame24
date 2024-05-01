@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -56,6 +58,8 @@ public class PlayerScript : MonoBehaviour
 		new Vector2(0, 23),
 		new Vector2(0, -23),
 	};
+
+	private PacketHandler packetHandler;
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -73,6 +77,9 @@ public class PlayerScript : MonoBehaviour
 		this.totalTime = 0;
 		this.musicCooldown = 0;
 		this.gameObject.transform.localScale = Vector3.one;
+
+		this.packetHandler = new PacketHandler();
+		this.packetHandler.Connect();
 	}
 
 	// Update is called once per frame
@@ -124,6 +131,11 @@ public class PlayerScript : MonoBehaviour
 		}
 		else
 		{
+			//this.packetHandler.Send(Encoding.ASCII.GetBytes(gameObject.transform.position.ToString() + '\0'));
+			this.packetHandler.SendPosition(gameObject.transform.position);
+
+
+
 			// dla gry (nie menu)
 			if (this.hp <= 0)
 			{

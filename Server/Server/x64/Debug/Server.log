@@ -1,0 +1,10 @@
+﻿  Game.cpp
+C:\Users\stasl\Desktop\GeoTheGame24\Server\Server\PacketMacros.h(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  (compiling source file 'Game.cpp')
+  
+  main.cpp
+C:\Users\stasl\Desktop\GeoTheGame24\Server\Server\PacketMacros.h(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  (compiling source file 'main.cpp')
+  
+  Generating Code...
+  Server.vcxproj -> C:\Users\stasl\Desktop\GeoTheGame24\Server\x64\Debug\Server.exe
